@@ -1,0 +1,24 @@
+===
+  En este documento se encuentra informacion suficiente para saber como
+  funcionan internamente objetos de Java dedicados a traducir los Json
+  y guardar cada fila de la base de datos, es decir, un punto medio para
+  el backend dentro del paquete "com.mistrapitos.api.table".
+
+  Todos los Objetos tendran el siguiente formato aunque internamente
+  no esten programados de esta forma (los setters y getters no seran
+  tomados en cuenta a no ser de agregar validaciones).
+
+  [Nombre del objeto]
+  -> variable1, variable2, variable3, ...
+  -> nombreDelMetodo -> lo que regresa | { solo si no hay metodos que explicar} 
+===
+
+  [Producto]
+  -> id, nombre, descripcion, precio, stock, categoria
+  -> {}
+
+  [Cliente]
+  -> id, nombre, telefono, email, direcccion
+  -> {}
+
+
