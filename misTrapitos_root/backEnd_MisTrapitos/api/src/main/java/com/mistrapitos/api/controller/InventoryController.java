@@ -33,7 +33,7 @@ public class InventoryController {
                     return producto;
                 });
     }
-    @PostMapping("/agregar")
+    @PostMapping("/")
     public String addCliente(@RequestBody Producto producto){
         /*
         String queryString = "INSERT INTO producto (nombre , descripcion , precio , stock , categoria) VALUES (?,?,?,?,?)";
