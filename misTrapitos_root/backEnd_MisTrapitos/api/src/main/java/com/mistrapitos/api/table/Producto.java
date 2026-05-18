@@ -10,20 +10,32 @@ public class Producto {
     private int stock;
     private String categoria;
 
-    public void setId(int id) {
+    public boolean setId(int id) {
+        if (id < 0) {
+            return false;
+        }
         this.id = id;
+        return true;
     }
 
-    public void setNombre(String nombre) {
+    public boolean setNombre(String nombre) {
+        if (nombre.isEmpty()) {
+            return false;
+        }
         this.nombre = nombre;
+        return true;
     }
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
 
-    public void setPrecio(BigDecimal precio) {
+    public boolean setPrecio(BigDecimal precio) {
+        if (precio.signum() <= 0){
+            return false;
+        }
         this.precio = precio;
+        return true;
     }
 
     public void setCategoria(String categoria) {
