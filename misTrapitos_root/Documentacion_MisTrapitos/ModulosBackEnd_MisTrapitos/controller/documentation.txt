@@ -1,0 +1,35 @@
+===
+  En este documento se encuentra informacion suficiente para saber que endpoints hay,
+  que metodo utiliza cada URI, que regresa cada una y que puede esperar.
+
+  Todos los URI's parten del localhost o 127.0.0.1:8080 o el aplicable
+
+
+  Contiene el siguiente formato:
+  [URI / End Point especificado / Path] > Metodo_HTTP
+  -> Retorno | HTTP (en caso de unicacmente un codigo http como 200 o 400)
+  -> Parametro esperado | Metodo | NA (en caso de no esperar parametros)
+===
+
+  [/productos/] > GET
+  -> [
+      {
+        "nombre": "prueba",
+        "descripcion": "esto es descriptivo",
+        "precio": 21.02,
+        "stock": 1,
+        "categoria": "un gei"
+      }
+    ]
+  -> NA
+
+  [/productos/] > POST
+  -> HTTP
+  -> {
+      "nombre": "prueba",
+      "descripcion": "esto es descriptivo",
+      "precio": 21.02,
+      "stock": 1,
+      "categoria": "un gei"
+    }
+

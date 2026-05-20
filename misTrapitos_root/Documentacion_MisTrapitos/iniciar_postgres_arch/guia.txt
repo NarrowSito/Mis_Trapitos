@@ -1,0 +1,18 @@
+Para inicar a PostgreSQL usa el comando:
+  sudo systemctl star postgresql
+
+Para detenrlo:
+  sudo systemctl stop postgresql
+
+Para consultar el estado de PostgreSQL:
+  sudo systemctl status postgresql
+
+
+
+Para entrar al shell de PostgreSQL:
+  psql -U postgres
+  psql -U <otro usuario>
+
+Para crear la base de datos desde un archivo.sql:
+  psql -U postgres -d nombre_de_la_base_de_datos -f path/del/archivo.sql
+  psql -U <otro usuario> -d nombre_de_la_base_de_datos -f path/del/archivo.sql
