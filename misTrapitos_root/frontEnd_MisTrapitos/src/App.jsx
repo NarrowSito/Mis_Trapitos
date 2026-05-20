@@ -1,51 +1,27 @@
-import { useState, useEffect } from 'react';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import Sidebar from './components/Sidebar';
+import VentasView from './views/VentasView';
+import ClientesView from './views/ClientesView';
 
-function App() {
-  const [productos, setProductos] = useState([]);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    // Aquí hacemos la petición GET al endpoint que documentó tu equipo
-    fetch('http://localhost:8080/productos/')
-      .then((respuesta) => {
-        if (!respuesta.ok) throw new Error('El servidor respondió con un error (Posible CORS)');
-        return respuesta.json(); 
-      })
-      .then((datos) => {
-        console.log("¡Datos recibidos!", datos);
-        setProductos(datos);
-      })
-      .catch((err) => {
-        console.error('Hubo un problema:', err);
-        setError('No se pudo conectar al backend (¿Está encendido el servidor de Java?).');
-      });
-  }, []);
-
+export default function App() {
   return (
-    <div style={{ padding: '20px', fontFamily: 'sans-serif' }}>
-      <h1>Sistema de Gestión "Mis Trapitos"</h1>
-      <h2>Prueba de conexión Frontend - Backend</h2>
-      
-      {error && (
-        <div style={{ background: '#ffebee', color: '#c62828', padding: '10px', borderRadius: '5px' }}>
-          <strong>Aviso esperado:</strong> {error}
-        </div>
-      )}
+    <Router>
+      <div style={{ display: 'flex', height: '100vh', fontFamily: 'Arial, sans-serif', margin: 0, backgroundColor: '#f4f6f9' }}>
+        
+        <Sidebar />
 
-      <ul>
-        {productos.length === 0 && !error ? (
-          <p>Cargando productos...</p>
-        ) : (
-          productos.map((prod, index) => (
-            <li key={index} style={{ marginBottom: '10px', borderBottom: '1px solid #ccc', paddingBottom: '10px' }}>
-              <strong>{prod.nombre}</strong> - ${prod.precio} <br />
-              <small>{prod.descripcion} | Stock: {prod.stock} | Categoría: {prod.categoria}</small>
-            </li>
-          ))
-        )}
-      </ul>
-    </div>
+        <main style={{ flexGrow: 1, padding: '40px', overflowY: 'auto' }}>
+          <Routes>
+            <Route path="/" element={<Navigate to="/ventas" replace />} />
+            <Route path="/ventas" element={<VentasView />} />
+            <Route path="/clientes" element={<ClientesView />} />
+            
+            <Route path="/inventario" element={<h2>Módulo de Inventario en construcción 🚧</h2>} />
+            <Route path="/reportes" element={<h2>Módulo de Reportes en construcción 🚧</h2>} />
+          </Routes>
+        </main>
+      </div>
+    </Router>
   );
 }
-
-export default App;
