@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
 export default function VentasView() {
-  // Simulamos los datos combinados que enviará el backend (con sus variaciones)
   const [productos] = useState([
     { id: 1, nombre: 'Camiseta Negra', categoria: 'Camisetas', precio: 240.00, variaciones: [
       { idVariacion: 1, talla: 'S', color: 'Negro', stock: 18 },
@@ -14,18 +13,18 @@ export default function VentasView() {
   ]);
 
   const [carrito, setCarrito] = useState([]);
-  
-  // Estados para manejar la ventanita de Tallas/Colores
   const [productoActivo, setProductoActivo] = useState(null);
+  
+  // NUEVO: Estados para el modal de cobro
+  const [mostrarModalPago, setMostrarModalPago] = useState(false);
+  const [metodoPago, setMetodoPago] = useState(''); // Guardará 'efectivo', 'tarjeta' o 'transferencia'
 
   const abrirSelector = (producto) => {
     setProductoActivo(producto);
   };
 
   const agregarVariacionAlCarrito = (variacion) => {
-    // Buscamos si ESA variación exacta ya está en el carrito
     const itemExistente = carrito.find(item => item.idVariacion === variacion.idVariacion);
-    
     if (itemExistente) {
       setCarrito(carrito.map(item => 
         item.idVariacion === variacion.idVariacion ? { ...item, cantidad: item.cantidad + 1 } : item
@@ -40,7 +39,7 @@ export default function VentasView() {
         cantidad: 1 
       }]);
     }
-    setProductoActivo(null); // Cerramos el modal
+    setProductoActivo(null);
   };
 
   const eliminarDelCarrito = (idVariacion) => {
@@ -48,6 +47,15 @@ export default function VentasView() {
   };
 
   const total = carrito.reduce((acc, item) => acc + (item.precio * item.cantidad), 0);
+
+  // NUEVO: Función para simular el envío final al backend
+  const procesarVenta = () => {
+    alert(`¡Venta procesada con éxito!\nMétodo: ${metodoPago.toUpperCase()}\nTotal a la BD: $${total.toFixed(2)}`);
+    // Aquí limpiaremos el carrito cuando el backend nos responda "OK"
+    setCarrito([]);
+    setMostrarModalPago(false);
+    setMetodoPago('');
+  };
 
   return (
     <div style={{ display: 'flex', gap: '20px', height: '100%', alignItems: 'flex-start', position: 'relative' }}>
@@ -100,34 +108,81 @@ export default function VentasView() {
           <span>Total:</span>
           <span>${total.toFixed(2)}</span>
         </div>
-        <button style={{ width: '100%', padding: '15px', backgroundColor: '#10b981', color: 'white', border: 'none', borderRadius: '6px', fontSize: '16px', fontWeight: 'bold', cursor: carrito.length === 0 ? 'not-allowed' : 'pointer', opacity: carrito.length === 0 ? 0.5 : 1 }}>
+        
+        {/* NUEVO: El botón ahora abre el modal de pago en lugar de no hacer nada */}
+        <button 
+          onClick={() => setMostrarModalPago(true)}
+          disabled={carrito.length === 0}
+          style={{ width: '100%', padding: '15px', backgroundColor: '#10b981', color: 'white', border: 'none', borderRadius: '6px', fontSize: '16px', fontWeight: 'bold', cursor: carrito.length === 0 ? 'not-allowed' : 'pointer', opacity: carrito.length === 0 ? 0.5 : 1 }}>
           Cobrar Venta
         </button>
       </div>
 
-      {/* --- VENTANA EMERGENTE (MODAL) DE TALLAS --- */}
+      {/* --- VENTANA EMERGENTE DE TALLAS --- */}
       {productoActivo && (
-        <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '8px' }}>
+        <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '8px', zIndex: 10 }}>
           <div style={{ backgroundColor: '#fff', padding: '30px', borderRadius: '8px', width: '400px', boxShadow: '0 4px 12px rgba(0,0,0,0.15)' }}>
             <h2 style={{ margin: '0 0 15px 0' }}>{productoActivo.nombre}</h2>
             <p style={{ color: '#6c757d', marginBottom: '20px' }}>Selecciona la variación a vender:</p>
-            
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               {productoActivo.variaciones.map(v => (
-                <button 
-                  key={v.idVariacion} 
-                  onClick={() => agregarVariacionAlCarrito(v)}
-                  style={{ display: 'flex', justifyContent: 'space-between', padding: '12px', border: '1px solid #dee2e6', borderRadius: '6px', background: '#f8f9fa', cursor: 'pointer', fontSize: '15px' }}
-                >
+                <button key={v.idVariacion} onClick={() => agregarVariacionAlCarrito(v)} style={{ display: 'flex', justifyContent: 'space-between', padding: '12px', border: '1px solid #dee2e6', borderRadius: '6px', background: '#f8f9fa', cursor: 'pointer', fontSize: '15px' }}>
                   <span>Talla: <strong>{v.talla}</strong> | {v.color}</span>
                   <span style={{ color: '#10b981', fontWeight: 'bold' }}>Stock: {v.stock}</span>
                 </button>
               ))}
             </div>
-
             <button onClick={() => setProductoActivo(null)} style={{ marginTop: '20px', width: '100%', padding: '10px', backgroundColor: '#dc2626', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}>
               Cancelar
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* --- NUEVO: VENTANA EMERGENTE DE PAGO --- */}
+      {mostrarModalPago && (
+        <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.6)', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '8px', zIndex: 20 }}>
+          <div style={{ backgroundColor: '#fff', padding: '30px', borderRadius: '8px', width: '350px', boxShadow: '0 4px 12px rgba(0,0,0,0.15)' }}>
+            <h2 style={{ margin: '0 0 10px 0', textAlign: 'center' }}>Método de Pago</h2>
+            <p style={{ textAlign: 'center', color: '#6c757d', marginBottom: '20px', fontSize: '16px' }}>Total a cobrar: <strong style={{ color: '#212529', fontSize: '20px' }}>${total.toFixed(2)}</strong></p>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '25px' }}>
+              {['efectivo', 'tarjeta', 'transferencia'].map(metodo => (
+                <button
+                  key={metodo}
+                  onClick={() => setMetodoPago(metodo)}
+                  style={{
+                    padding: '12px',
+                    border: '1px solid',
+                    borderColor: metodoPago === metodo ? '#3b82f6' : '#dee2e6',
+                    borderRadius: '6px',
+                    background: metodoPago === metodo ? '#eff6ff' : '#f8f9fa',
+                    color: metodoPago === metodo ? '#1e3a8a' : '#495057',
+                    fontWeight: metodoPago === metodo ? 'bold' : 'normal',
+                    cursor: 'pointer',
+                    fontSize: '15px',
+                    textTransform: 'capitalize',
+                    transition: '0.2s'
+                  }}
+                >
+                  {metodo === 'efectivo' ? 'Efectivo' : metodo === 'tarjeta' ? 'Tarjeta' : 'Transferencia'}
+                </button>
+              ))}
+            </div>
+
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <button 
+                onClick={() => { setMostrarModalPago(false); setMetodoPago(''); }} 
+                style={{ flex: 1, padding: '12px', backgroundColor: '#f8f9fa', color: '#495057', border: '1px solid #dee2e6', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' }}>
+                Cancelar
+              </button>
+              <button 
+                onClick={procesarVenta}
+                disabled={!metodoPago}
+                style={{ flex: 1, padding: '12px', backgroundColor: '#10b981', color: 'white', border: 'none', borderRadius: '6px', cursor: !metodoPago ? 'not-allowed' : 'pointer', opacity: !metodoPago ? 0.5 : 1, fontWeight: 'bold' }}>
+                Confirmar
+              </button>
+            </div>
           </div>
         </div>
       )}
