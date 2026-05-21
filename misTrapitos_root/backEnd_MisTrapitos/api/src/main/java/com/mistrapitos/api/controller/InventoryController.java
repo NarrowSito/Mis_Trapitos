@@ -24,7 +24,6 @@ public class InventoryController {
        return jdbcTemplate.query(sqlQuery,
                 (resultSet, rowNum) -> {
                     Producto producto = new Producto();
-                    producto.setId(resultSet.getInt("id"));
                     producto.setCategoria(resultSet.getString("categoria"));
                     producto.setDescripcion(resultSet.getString("descripcion"));
                     producto.setNombre(resultSet.getString("nombre"));
