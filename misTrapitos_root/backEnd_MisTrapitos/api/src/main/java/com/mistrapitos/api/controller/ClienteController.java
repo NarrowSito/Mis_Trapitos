@@ -25,6 +25,9 @@ public class ClienteController {
                     cliente.setDireccion(resultSet.getString("direccion"));
                     cliente.setEmail(resultSet.getString("email"));
                     cliente.setTelefono(resultSet.getString("telefono"));
+                    cliente.setDireccion(resultSet.getString("direccion"));
+                    cliente.setCiudad(resultSet.getString("ciudad"));
+                    cliente.setRegion(resultSet.getString("region"));
                     return cliente;
                 });
     }
