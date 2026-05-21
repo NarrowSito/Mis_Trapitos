@@ -6,6 +6,8 @@ public class Cliente{
     private String telefono = "";
     private String email = "";
     private String direccion = "";
+    private String ciudad = "";
+    private String region = "";
 
     public int getId() {
         return id;
@@ -60,5 +62,21 @@ public class Cliente{
             return;
         }
         this.telefono = telefono;
+    }
+
+    public String getRegion() {
+        return region;
+    }
+
+    public void setRegion(String region) {
+        this.region = region;
+    }
+
+    public String getCiudad() {
+        return ciudad;
+    }
+
+    public void setCiudad(String ciudad) {
+        this.ciudad = ciudad;
     }
 }
