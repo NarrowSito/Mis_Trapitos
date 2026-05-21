@@ -30,7 +30,7 @@ public class ClienteController {
                     cliente.setRegion(resultSet.getString("region"));
                     return cliente;
                 });
-    }
+    }Local
 
     @PostMapping("/")
     public boolean addNewCliente(@RequestBody Cliente cliente){
