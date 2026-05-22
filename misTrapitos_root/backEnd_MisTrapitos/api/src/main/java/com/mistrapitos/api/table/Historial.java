@@ -3,15 +3,50 @@ package com.mistrapitos.api.table;
 import java.time.LocalDateTime;
 
 public class Historial {
-    private String nombre = "";
     private String tipoMovimiento = "";
     private int cantidad = 0;
     private int stockAnterior = 0;
     private int stockNuevo = 0;
+    private String motivo = "";
+    private String usuario = "";
     private LocalDateTime fecha;
+    private String color = "";
+    private  String talla = "";
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+
+
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public String getTalla() {
+        return talla;
+    }
+
+    public void setTalla(String talla) {
+        this.talla = talla;
+    }
+
+    public String getMotivo() {
+        return motivo;
+    }
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setMotivo(String motivo) {
+        this.motivo = motivo;
+    }
+
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
     }
 
     public void setCantidad(int cantidad) {
@@ -34,9 +69,6 @@ public class Historial {
         this.tipoMovimiento = tipoMovimiento;
     }
 
-    public String getNombre() {
-        return nombre;
-    }
 
     public int getCantidad() {
         return cantidad;
