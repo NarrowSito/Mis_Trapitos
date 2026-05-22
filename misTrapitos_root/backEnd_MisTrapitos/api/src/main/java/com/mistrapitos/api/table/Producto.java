@@ -11,10 +11,19 @@ public class Producto {
     private String talla = "";
     private String color = "";
     private int stock = 0;
+    private String provedor = "";
     private String descripcion = "";
     private BigDecimal porcentajeDescuento = BigDecimal.ZERO;
     private LocalDate fechaInicio;
     private LocalDate fechaFin;
+
+    public String getProvedor() {
+        return provedor;
+    }
+
+    public void setProvedor(String provedor) {
+        this.provedor = provedor;
+    }
 
     public int getId() {
         return id;

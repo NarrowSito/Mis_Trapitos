@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 public class LoginController {
     @Autowired
     private JdbcTemplate jdbcTemplate;
-    @GetMapping("/")
+    @PutMapping("/")
     public ResponseEntity<Usuario> loginFunction(@RequestBody Usuario user){
         if (user.getNombre().isEmpty() || user.getPassword().contains("\"") || user.getPassword().contains("'")){
             return ResponseEntity.status(404).body(user);
