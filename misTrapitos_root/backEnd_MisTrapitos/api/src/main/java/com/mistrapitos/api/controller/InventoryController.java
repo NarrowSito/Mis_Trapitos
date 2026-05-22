@@ -21,10 +21,11 @@ public class InventoryController {
 
     @GetMapping("/")
     public List<Producto> getProductos(){
-        String sqlQuery = "SELECT p.nombre,p.precio,p.categoria,vp.talla,vp.color,p.descripcion,vp.stock,pro.porcentaje_descuento,pro.fecha_inicio,pro.fecha_fin FROM Variaciones_Producto vp JOIN Productos p ON vp.producto_id = p.id JOIN Promociones pro ON pro.producto_id = p.id ORDER BY p.nombre";
+        String sqlQuery = "SELECT p.id,p.nombre,p.precio,p.categoria,vp.talla,vp.color,p.descripcion,vp.stock,pro.porcentaje_descuento,pro.fecha_inicio,pro.fecha_fin FROM Variaciones_Producto vp JOIN Productos p ON vp.producto_id = p.id JOIN Promociones pro ON pro.producto_id = p.id ORDER BY p.nombre";
        return jdbcTemplate.query(sqlQuery,
                 (resultSet, rowNum) -> {
                     Producto producto = new Producto();
+                    producto.setId(resultSet.getInt("id"));
                     producto.setCategoria(resultSet.getString("categoria"));
                     producto.setDescripcion(resultSet.getString("descripcion"));
                     producto.setNombre(resultSet.getString("nombre"));
@@ -45,5 +46,4 @@ public class InventoryController {
                 queryString,producto.getNombre(),
                 producto.getDescripcion(), producto.getPrecio(), producto.getStock() ,producto.getCategoria()) > 0;
     }
-
 }
