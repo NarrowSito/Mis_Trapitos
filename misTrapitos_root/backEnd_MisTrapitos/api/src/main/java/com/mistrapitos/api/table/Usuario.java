@@ -1,13 +1,22 @@
 package com.mistrapitos.api.table;
 
 public class Usuario {
-    private String nombre;
-    private String email;
-    private String password;
-    private String rol;
+    private int id = -1;
+    private String nombre = "";
+    private String email = "";
+    private String password = "";
+    private String rol = "";
 
     public String getNombre() {
         return nombre;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public void setNombre(String nombre) {
