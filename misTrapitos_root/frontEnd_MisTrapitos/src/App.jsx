@@ -28,36 +28,22 @@ export default function App() {
 
         <main style={{ flexGrow: 1, padding: '40px', overflowY: 'auto' }}>
           <Routes>
-            <Route path="/" element={
-              rol === 'Contabilidad' ? <Navigate to="/inventario" replace /> : <Navigate to="/ventas" replace />
-            } />
+            <Route path="/" element={<Navigate to="/ventas" replace />} />
             
-            {/* Ventas y Administrador */}
+            {/* Accesible para todos */}
             <Route path="/ventas" element={
-              (rol === 'Ventas' || rol === 'Administrador') ? <VentasView sesionUsuario={sesionUsuario} /> : <Navigate to="/" replace />
+              (rol === 'empleado' || rol === 'admin') ? <VentasView sesionUsuario={sesionUsuario} /> : <Navigate to="/" replace />
             } />
             <Route path="/clientes" element={
-              (rol === 'Ventas' || rol === 'Administrador') ? <ClientesView /> : <Navigate to="/" replace />
+              (rol === 'empleado' || rol === 'admin') ? <ClientesView /> : <Navigate to="/" replace />
             } />
 
-            {/* Contabilidad y Administrador */}
-            <Route path="/inventario" element={
-              (rol === 'Contabilidad' || rol === 'Administrador') ? <InventarioView /> : <Navigate to="/" replace />
-            } />
-            <Route path="/reportes" element={
-              (rol === 'Contabilidad' || rol === 'Administrador') ? <ReportesView /> : <Navigate to="/" replace />
-            } />
-            <Route path="/proveedores" element={
-              (rol === 'Contabilidad' || rol === 'Administrador') ? <ProveedoresView /> : <Navigate to="/" replace />
-            } />
-
-            {/* Exclusivo del Administrador */}
-            <Route path="/empleados" element={
-              rol === 'Administrador' ? <EmpleadosView /> : <Navigate to="/" replace />
-            } />
-            <Route path="/auditoria" element={
-              rol === 'Administrador' ? <AuditoriaView /> : <Navigate to="/" replace />
-            } />
+            {/* Exclusivo del Admin (Lo demás queda oculto) */}
+            <Route path="/inventario" element={rol === 'admin' ? <InventarioView /> : <Navigate to="/" replace />} />
+            <Route path="/reportes" element={rol === 'admin' ? <ReportesView /> : <Navigate to="/" replace />} />
+            <Route path="/proveedores" element={rol === 'admin' ? <ProveedoresView /> : <Navigate to="/" replace />} />
+            <Route path="/empleados" element={rol === 'admin' ? <EmpleadosView /> : <Navigate to="/" replace />} />
+            <Route path="/auditoria" element={rol === 'admin' ? <AuditoriaView /> : <Navigate to="/" replace />} />
           </Routes>
         </main>
       </div>

@@ -30,8 +30,8 @@ export default function Sidebar({ rol, nombre, onCerrarSesion }) {
       {/* 2. NAVEGACION (Flexible y con scroll independiente) */}
       <nav style={{ flexGrow: 1, padding: '20px 0', overflowY: 'auto' }}>
         
-        {/* Modulos para Ventas y Administrador */}
-        {(rol === 'Ventas' || rol === 'Administrador') && (
+        {/* Modulos Generales */}
+        {(rol === 'empleado' || rol === 'admin') && (
           <>
             <div style={{ padding: '0 20px 10px 20px', fontSize: '11px', color: '#6c757d', textTransform: 'uppercase', letterSpacing: '1px' }}>Operacion</div>
             <Link to="/ventas" style={linkStyle('/ventas')}>Registrar Venta (POS)</Link>
@@ -39,20 +39,13 @@ export default function Sidebar({ rol, nombre, onCerrarSesion }) {
           </>
         )}
 
-        {/* Modulos para Contabilidad y Administrador */}
-        {(rol === 'Contabilidad' || rol === 'Administrador') && (
+        {/* Modulos del Admin */}
+        {rol === 'admin' && (
           <>
-            <div style={{ padding: '20px 20px 10px 20px', fontSize: '11px', color: '#6c757d', textTransform: 'uppercase', letterSpacing: '1px' }}>Almacen y Finanzas</div>
+            <div style={{ padding: '20px 20px 10px 20px', fontSize: '11px', color: '#6c757d', textTransform: 'uppercase', letterSpacing: '1px' }}>Administracion y Almacen</div>
             <Link to="/inventario" style={linkStyle('/inventario')}>Inventario Activo</Link>
             <Link to="/reportes" style={linkStyle('/reportes')}>Consultas y Reportes</Link>
             <Link to="/proveedores" style={linkStyle('/proveedores')}>Proveedores</Link>
-          </>
-        )}
-
-        {/* Modulos exclusivos del Administrador */}
-        {rol === 'Administrador' && (
-          <>
-            <div style={{ padding: '20px 20px 10px 20px', fontSize: '11px', color: '#6c757d', textTransform: 'uppercase', letterSpacing: '1px' }}>Administracion</div>
             <Link to="/empleados" style={linkStyle('/empleados')}>Gestionar Personal</Link>
             <Link to="/auditoria" style={linkStyle('/auditoria')}>Auditoria de Sistema</Link>
           </>
