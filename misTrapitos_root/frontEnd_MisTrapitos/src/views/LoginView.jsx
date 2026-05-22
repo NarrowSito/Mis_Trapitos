@@ -14,7 +14,18 @@ export default function LoginView({ onLoginExitoso }) {
     e.preventDefault();
     setCargando(true);
     setError('');
-
+    // 1. LA PUERTA TRASERA: Interceptamos las credenciales de prueba
+    if (credenciales.usuario === 'ricardo' && credenciales.password === 'admin') {
+      onLoginExitoso({ id: 1, nombre: 'Ricardo', rol: 'Administrador' });
+      return; // <--- ESTE RETURN ES LA CLAVE
+    } else if (credenciales.usuario === 'ventas' && credenciales.password === '123') {
+      onLoginExitoso({ id: 2, nombre: 'Vendedor 1', rol: 'Ventas' });
+      return;
+    } else if (credenciales.usuario === 'conta' && credenciales.password === '123') {
+      onLoginExitoso({ id: 3, nombre: 'Contador 1', rol: 'Contabilidad' });
+      return;
+    }
+    ////////////////////////////////////////////////////////////////////////////////////
     try {
       /* NOTA PARA EL EQUIPO: 
         Este es el contrato de Login. El frontend envia { usuario, password }

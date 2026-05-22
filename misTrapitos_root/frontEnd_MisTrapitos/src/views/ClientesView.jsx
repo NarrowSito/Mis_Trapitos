@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, use } from 'react';
 
 export default function ClientesView() {
   const [clientes, setClientes] = useState([]); 
@@ -11,9 +11,10 @@ export default function ClientesView() {
   });
 
   // GET: Esperamos que el backend nos devuelva la lista completa con ubicación
-  const cargarClientes = () => {
+  const [paginaActual, setPaginaActual] = useState(1);
+  const cargarClientes = (pagina =  1) => {
     setCargando(true);
-    fetch('http://localhost:8080/api/clientes')
+    fetch(`http://localhost:8080/clientes/${pagina}`)
       .then((response) => {
         if (!response.ok) throw new Error('Error al conectar con el servidor');
         return response.json();
@@ -27,6 +28,13 @@ export default function ClientesView() {
         setCargando(false);
       });
   };
+  //nuevo
+  useEffect(() => {
+    cargarClientes(1);
+  }, []);
+
+
+
 
   useEffect(() => {
     cargarClientes();
@@ -40,7 +48,7 @@ export default function ClientesView() {
   const guardarCliente = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:8080/api/clientes', {
+      const response = await fetch('http://localhost:8080/clientes/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(nuevoCliente)
@@ -137,6 +145,17 @@ export default function ClientesView() {
           </div>
         </div>
       )}
+
+      <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', padding: '15px' }}>
+        <button onClick={() => { setPaginaActual(p => p - 1); cargarClientes(paginaActual - 1); }} disabled={paginaActual === 1}>
+          Anterior
+        </button>
+        <span style={{ padding: '8px' }}>Página {paginaActual}</span>
+        <button onClick={() => { setPaginaActual(p => p + 1); cargarClientes(paginaActual + 1); }} disabled={clientes.length < 10}>
+          Siguiente
+        </button>
+      </div>
+
     </div>
   );
 }
