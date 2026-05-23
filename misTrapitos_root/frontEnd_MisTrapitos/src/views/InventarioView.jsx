@@ -44,7 +44,7 @@ export default function InventarioView() {
       };
 
       const response = await fetch('http://localhost:8080/productos/', {
-        method: 'POST',
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       });

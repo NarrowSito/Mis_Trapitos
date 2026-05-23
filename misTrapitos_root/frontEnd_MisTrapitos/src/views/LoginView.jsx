@@ -18,7 +18,7 @@ export default function LoginView({ onLoginExitoso }) {
     try {
       // CAMBIO 2: Ruta limpia apuntando al POST del LoginController
       const response = await fetch('http://localhost:8080/login/', {
-        method: 'POST',
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(credenciales)
       });
