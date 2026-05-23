@@ -44,7 +44,7 @@ export default function AuditoriaView() {
                 <th style={{ padding: '15px', color: '#495057' }}>Movimiento</th>
                 <th style={{ padding: '15px', color: '#495057' }}>Prenda</th>
                 <th style={{ padding: '15px', color: '#495057' }}>Cant.</th>
-                <th style={{ padding: '15px', color: '#495057' }}>Stock (Ant -> Nvo)</th>
+                <th style={{ padding: '15px', color: '#495057' }}>Stock (Ant {"->"} Nvo)</th>
               </tr>
             </thead>
             <tbody>
