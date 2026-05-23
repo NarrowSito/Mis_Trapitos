@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/ventas")
 @CrossOrigin(origins = "http://localhost:5173")
@@ -15,5 +17,5 @@ public class VentaController {
     private JdbcTemplate jdbcTemplate;
 
     @PostMapping("/")
-    public ResponseEntity<Venta> newVenta(@RequestBody Venta venta){}
+    public ResponseEntity<Venta> newVenta(@RequestBody Venta venta,@RequestBody List<Producto> productos){}
 }

@@ -10,7 +10,7 @@ public class Venta {
     private String producto;
     private int cantidad;
     private String vendedor;
-    private BigDecimal subtotal;
+    private BigDecimal total;
     private String metodoDePago;
     private LocalDateTime fecha;
 
@@ -55,11 +55,11 @@ public class Venta {
     }
 
     public BigDecimal getSubtotal() {
-        return subtotal;
+        return total;
     }
 
-    public void setSubtotal(BigDecimal subtotal) {
-        this.subtotal = subtotal;
+    public void setSubtotal(BigDecimal total) {
+        this.total = total;
     }
 
     public String getMetodoDePago() {
