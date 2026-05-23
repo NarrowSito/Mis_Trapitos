@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 
 export default function LoginView({ onLoginExitoso }) {
-  const [credenciales, setCredenciales] = useState({ usuario: '', password: '' });
+  // CAMBIO 1: Usamos 'nombre' en lugar de 'usuario' para que haga match con Java
+  const [credenciales, setCredenciales] = useState({ nombre: '', password: '' });
   const [cargando, setCargando] = useState(false);
   const [error, setError] = useState('');
 
@@ -9,29 +10,14 @@ export default function LoginView({ onLoginExitoso }) {
     setCredenciales({ ...credenciales, [e.target.name]: e.target.value });
   };
 
-  // POST: Envio de credenciales al backend (Caso Ideal)
   const iniciarSesion = async (e) => {
     e.preventDefault();
     setCargando(true);
     setError('');
-    // 1. LA PUERTA TRASERA: Interceptamos las credenciales de prueba
-    if (credenciales.usuario === 'ricardo' && credenciales.password === 'admin') {
-      onLoginExitoso({ id: 1, nombre: 'Ricardo', rol: 'Administrador' });
-      return; // <--- ESTE RETURN ES LA CLAVE
-    } else if (credenciales.usuario === 'ventas' && credenciales.password === '123') {
-      onLoginExitoso({ id: 2, nombre: 'Vendedor 1', rol: 'Ventas' });
-      return;
-    } else if (credenciales.usuario === 'conta' && credenciales.password === '123') {
-      onLoginExitoso({ id: 3, nombre: 'Contador 1', rol: 'Contabilidad' });
-      return;
-    }
-    ////////////////////////////////////////////////////////////////////////////////////
+
     try {
-      /* NOTA PARA EL EQUIPO: 
-        Este es el contrato de Login. El frontend envia { usuario, password }
-        y espera recibir un objeto de sesion con { id, nombre, rol }
-      */
-      const response = await fetch('http://localhost:8080/api/login', {
+      // CAMBIO 2: Ruta limpia apuntando al POST del LoginController
+      const response = await fetch('http://localhost:8080/login/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(credenciales)
@@ -39,21 +25,14 @@ export default function LoginView({ onLoginExitoso }) {
 
       if (response.ok) {
         const datosUsuario = await response.json();
-        onLoginExitoso(datosUsuario); // Le pasamos los datos a App.jsx
+        // Java nos regresa el objeto completo de PostgreSQL con el rol real
+        onLoginExitoso(datosUsuario); 
       } else {
-        // Simulacion temporal para que puedas probar el front sin backend
-        if (credenciales.usuario === 'ricardo' && credenciales.password === 'admin') {
-          onLoginExitoso({ id: 1, nombre: 'Ricardo', rol: 'Administrador' });
-        } else if (credenciales.usuario === 'ventas' && credenciales.password === '123') {
-          onLoginExitoso({ id: 2, nombre: 'Vendedor 1', rol: 'Ventas' });
-        } else if (credenciales.usuario === 'conta' && credenciales.password === '123') {
-          onLoginExitoso({ id: 3, nombre: 'Contador 1', rol: 'Contabilidad' });
-        } else {
-          setError('Credenciales invalidas. Intente de nuevo.');
-        }
+        setError('Credenciales inválidas en la Base de Datos. Intenta de nuevo.');
+        setCargando(false);
       }
     } catch (err) {
-      setError('Error al conectar con el servidor.');
+      setError('Error al conectar con el servidor. ¿Está prendido Spring Boot?');
       setCargando(false);
     }
   };
@@ -75,8 +54,9 @@ export default function LoginView({ onLoginExitoso }) {
 
         <form onSubmit={iniciarSesion} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           <div>
-            <label style={{ display: 'block', marginBottom: '5px', fontSize: '14px', color: '#495057' }}>Usuario de Empleado</label>
-            <input required type="text" name="usuario" value={credenciales.usuario} onChange={manejarCambio} style={{ width: '100%', padding: '12px', border: '1px solid #dee2e6', borderRadius: '6px', boxSizing: 'border-box' }} />
+            <label style={{ display: 'block', marginBottom: '5px', fontSize: '14px', color: '#495057' }}>Nombre de Empleado</label>
+            {/* CAMBIO 3: Actualizamos el input para que alimente 'nombre' */}
+            <input required type="text" name="nombre" value={credenciales.nombre} onChange={manejarCambio} style={{ width: '100%', padding: '12px', border: '1px solid #dee2e6', borderRadius: '6px', boxSizing: 'border-box' }} />
           </div>
           
           <div>
@@ -85,7 +65,7 @@ export default function LoginView({ onLoginExitoso }) {
           </div>
 
           <button type="submit" disabled={cargando} style={{ width: '100%', padding: '14px', backgroundColor: '#3b82f6', color: 'white', border: 'none', borderRadius: '6px', fontWeight: 'bold', fontSize: '16px', cursor: cargando ? 'not-allowed' : 'pointer', marginTop: '10px' }}>
-            {cargando ? 'Validando...' : 'Iniciar Sesion'}
+            {cargando ? 'Validando...' : 'Iniciar Sesión'}
           </button>
         </form>
       </div>
