@@ -3,63 +3,63 @@ package com.mistrapitos.api.table;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class Venta {
-    private int id;
-    private String cliente;
-    private String producto;
-    private int cantidad;
-    private String vendedor;
-    private BigDecimal total;
-    private String metodoDePago;
-    private LocalDateTime fecha;
+    private Long id = (long) -1;
+    private Long clienteId = (long) -1;
+    private Long usuarioId = (long) -1;
+    private String metodoDePago = "";
+    private BigDecimal total = new BigDecimal(-1);
+    private List<Producto> productos;
+    private LocalDateTime fecha = null;
 
-    public int getId() {
+    public LocalDateTime getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(LocalDateTime fecha) {
+        this.fecha = fecha;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public String getCliente() {
-        return cliente;
+    public Long getClienteId() {
+        return clienteId;
     }
 
-    public void setCliente(String cliente) {
-        this.cliente = cliente;
+    public void setClienteId(Long clienteId) {
+        this.clienteId = clienteId;
     }
 
-    public String getProducto() {
-        return producto;
+    public Long getUsuarioId() {
+        return usuarioId;
     }
 
-    public void setProducto(String producto) {
-        this.producto = producto;
+    public void setUsuarioId(Long usuarioId) {
+        this.usuarioId = usuarioId;
     }
 
-    public int getCantidad() {
-        return cantidad;
-    }
-
-    public void setCantidad(int cantidad) {
-        this.cantidad = cantidad;
-    }
-
-    public String getVendedor() {
-        return vendedor;
-    }
-
-    public void setVendedor(String vendedor) {
-        this.vendedor = vendedor;
-    }
-
-    public BigDecimal getSubtotal() {
+    public BigDecimal getTotal() {
         return total;
     }
 
-    public void setSubtotal(BigDecimal total) {
+    public void setTotal(BigDecimal total) {
         this.total = total;
+    }
+
+    public List<Producto> getProductos() {
+        return productos;
+    }
+
+    public void setProductos(List<Producto> productos) {
+        this.productos = productos;
     }
 
     public String getMetodoDePago() {
@@ -70,11 +70,4 @@ public class Venta {
         this.metodoDePago = metodoDePago;
     }
 
-    public LocalDateTime getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(LocalDateTime fecha) {
-        this.fecha = fecha;
-    }
 }

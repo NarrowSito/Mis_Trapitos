@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class Producto {
-    private int id;
+    private int id = -1;
     private String nombre = "";
     private BigDecimal precio = BigDecimal.ZERO;
     private String categoria = "";
@@ -45,8 +45,8 @@ public class Producto {
         return precio;
     }
 
-    public void setPrecio(BigDecimal precio) {
-        this.precio = precio;
+    public BigDecimal setPrecio(BigDecimal precio) {
+        return this.precio = precio;
     }
 
     public String getCategoria() {
