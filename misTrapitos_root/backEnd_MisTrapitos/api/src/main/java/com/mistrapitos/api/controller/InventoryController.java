@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -46,19 +47,45 @@ public class InventoryController {
                 });
     }
     @PutMapping("/")
-    public ResponseEntity<Producto> addStock(@RequestBody Producto producto){
-        Integer howMany;
-        String queryStringGet = "SELECT stock from variaciones_producto WHERE id =";
+    public ResponseEntity<?> addStock(@RequestBody java.util.Map<String, Object> body){
+        // Esperamos { id: number, stock: number, usuarioId?: number }
+        Integer id = (body.get("id") instanceof Number) ? ((Number) body.get("id")).intValue() : Integer.parseInt(body.get("id").toString());
+        Integer add = (body.get("stock") instanceof Number) ? ((Number) body.get("stock")).intValue() : Integer.parseInt(body.get("stock").toString());
+        Long usuarioId = null;
+        if (body.get("usuarioId") != null) {
+            if (body.get("usuarioId") instanceof Number) usuarioId = ((Number) body.get("usuarioId")).longValue();
+            else usuarioId = Long.parseLong(body.get("usuarioId").toString());
+        }
+
+        String queryStringGet = "SELECT stock from variaciones_producto WHERE id =" + id + ";";
         String queryStringUpdate = "UPDATE variaciones_producto SET stock = ? WHERE id = ?";
-         int b;
-         howMany = jdbcTemplate.queryForObject((queryStringGet + (producto.getId()) + ";"), Integer.class);
-         howMany += producto.getStock();
-         b = jdbcTemplate.update(
-                queryStringUpdate,howMany, producto.getId());
-         if ( b <= 0) {
-             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_CONTENT).body(producto);
-         }
-        return ResponseEntity.status(HttpStatus.CREATED).body(producto);
+        String queryInsertMovimiento = "INSERT INTO movimientos_inventario(tipo_movimiento, cantidad, stock_anterior, stock_nuevo, motivo, fecha, usuario_id, variacion_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        try {
+            Integer stockAnterior = jdbcTemplate.queryForObject(queryStringGet, Integer.class);
+            if (stockAnterior == null) stockAnterior = 0;
+            int stockNuevo = stockAnterior + add;
+            int b = jdbcTemplate.update(queryStringUpdate, stockNuevo, id);
+            if (b <= 0) {
+                return ResponseEntity.status(HttpStatus.UNPROCESSABLE_CONTENT).body(java.util.Collections.singletonMap("error", "No se pudo actualizar stock"));
+            }
+
+            jdbcTemplate.update(
+                    queryInsertMovimiento,
+                    "ingreso",
+                    add,
+                    stockAnterior,
+                    stockNuevo,
+                    "suministro",
+                    java.time.LocalDateTime.now(),
+                    usuarioId,
+                    id
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(java.util.Collections.singletonMap("error", e.getMessage()));
+        }
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(java.util.Collections.singletonMap("id", id));
     }
 
     @PostMapping("/")

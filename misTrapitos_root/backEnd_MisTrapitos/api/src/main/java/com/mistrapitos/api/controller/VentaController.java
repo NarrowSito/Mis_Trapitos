@@ -58,7 +58,7 @@ public class VentaController {
             venta.setClienteId(null);
         }
         try {
-            if (venta.getClienteId() >= 0){
+            if (venta.getUsuarioId() >= 0){
                 venta.setUsuarioId(jdbcTemplate.queryForObject(queryCheckUserId+(venta.getUsuarioId()), Long.class));
             }
         }catch (EmptyResultDataAccessException e){
@@ -75,8 +75,38 @@ public class VentaController {
                     venta.getMetodoDePago()
                     )
         );
+        // Por cada producto, insertar detalle, actualizar stock y crear movimiento de inventario
+        String queryGetStock = "SELECT stock FROM variaciones_producto WHERE id = ?";
+        String queryUpdateStock = "UPDATE variaciones_producto SET stock = ? WHERE id = ?";
+        String queryInsertMovimiento = "INSERT INTO movimientos_inventario(tipo_movimiento, cantidad, stock_anterior, stock_nuevo, motivo, fecha, usuario_id, variacion_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
         for (Producto p : venta.getProductos()){
-            totalCalculado = totalCalculado.add(p.setPrecio(jdbcTemplate.queryForObject(queryNewDetalle,BigDecimal.class,venta.getId(),p.getStock(),p.getId())));
+            BigDecimal subtotal = jdbcTemplate.queryForObject(queryNewDetalle, BigDecimal.class, venta.getId(), p.getStock(), p.getId());
+            totalCalculado = totalCalculado.add(p.setPrecio(subtotal));
+
+            // cantidad vendida (se usa `stock` del producto como cantidad en la petición)
+            int cantidadVendida = p.getStock();
+            try {
+                Integer stockAnterior = jdbcTemplate.queryForObject(queryGetStock, Integer.class, p.getId());
+                if (stockAnterior == null) stockAnterior = 0;
+                int stockNuevo = stockAnterior - cantidadVendida;
+                jdbcTemplate.update(queryUpdateStock, stockNuevo, p.getId());
+
+                jdbcTemplate.update(
+                        queryInsertMovimiento,
+                        "venta",
+                        cantidadVendida,
+                        stockAnterior,
+                        stockNuevo,
+                        "venta",
+                        venta.getFecha(),
+                        venta.getUsuarioId(),
+                        p.getId()
+                );
+            } catch (Exception e){
+                // Log para depuración: mostrar por qué no se insertó el movimiento
+                e.printStackTrace();
+            }
         }
         if (totalCalculado.compareTo(venta.getTotal()) != 0){
             jdbcTemplate.update(queryFinalStage, totalCalculado, venta.getId());
