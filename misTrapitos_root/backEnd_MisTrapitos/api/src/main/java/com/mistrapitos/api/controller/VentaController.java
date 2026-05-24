@@ -51,9 +51,11 @@ public class VentaController {
         try {
             if (venta.getClienteId() >= 0){
                 venta.setClienteId(jdbcTemplate.queryForObject(queryCheckClienteId+(venta.getClienteId()), Long.class));
+            }else{
+                venta.setClienteId(null);
             }
         }catch (EmptyResultDataAccessException e){
-            venta.setClienteId((long) -1);
+            venta.setClienteId(null);
         }
         try {
             if (venta.getClienteId() >= 0){
