@@ -110,6 +110,7 @@ export default function VentasView({ sesionUsuario = { id: 1, rol: 'Ventas', nom
                 onClick={() => agregarAlCarrito(prod)}
                 style={{ 
                   backgroundColor: prod.stock === 0 ? '#f8f9fa' : '#fff', 
+                  color: prod.stock === 0 ? '#495057' : '#212529',
                   opacity: prod.stock === 0 ? 0.5 : 1,
                   padding: '15px', borderRadius: '8px', border: '1px solid #dee2e6', 
                   cursor: prod.stock === 0 ? 'not-allowed' : 'pointer'
@@ -138,7 +139,7 @@ export default function VentasView({ sesionUsuario = { id: 1, rol: 'Ventas', nom
 
       
       {/* SECCIÓN DERECHA: TICKET Y COBRO */}
-      <div style={{ flex: '3', backgroundColor: '#fff', padding: '20px', borderRadius: '8px', border: '1px solid #dee2e6' }}>
+      <div style={{ flex: '3', backgroundColor: '#fff', color: '#212529', padding: '20px', borderRadius: '8px', border: '1px solid #dee2e6' }}>
         <h2 style={{ margin: '0 0 20px 0', fontSize: '20px', borderBottom: '1px solid #eee', paddingBottom: '10px' }}>Ticket Actual</h2>
         
         {/* SELECTOR DE CLIENTES REAL */}
@@ -189,21 +190,32 @@ export default function VentasView({ sesionUsuario = { id: 1, rol: 'Ventas', nom
 
       {/* MODAL DE PAGO */}
       {mostrarModalPago && (
-        <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.6)', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '8px', zIndex: 20 }}>
-          <div style={{ backgroundColor: '#fff', padding: '30px', borderRadius: '8px', width: '350px' }}>
-            <h2 style={{ textAlign: 'center', margin: '0 0 20px 0' }}>Método de Pago</h2>
+          <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.6)', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '8px', zIndex: 20 }}>
+          <div style={{ backgroundColor: '#fff', color: '#212529', padding: '30px', borderRadius: '8px', width: '350px' }}>
+            <h2 style={{ textAlign: 'center', margin: '0 0 20px 0', color: '#212529' }}>Método de Pago</h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '25px' }}>
               {['efectivo', 'tarjeta', 'transferencia'].map(metodo => (
                 <button
                   key={metodo} onClick={() => setMetodoPago(metodo)}
-                  style={{ padding: '12px', border: '1px solid', borderColor: metodoPago === metodo ? '#3b82f6' : '#dee2e6', borderRadius: '6px', background: metodoPago === metodo ? '#eff6ff' : '#f8f9fa', fontWeight: metodoPago === metodo ? 'bold' : 'normal', cursor: 'pointer', textTransform: 'capitalize' }}
+                  style={{
+                    padding: '12px',
+                    border: '1px solid',
+                    borderColor: metodoPago === metodo ? '#3b82f6' : '#dee2e6',
+                    borderRadius: '6px',
+                    background: metodoPago === metodo ? '#eff6ff' : '#f8f9fa',
+                    color: metodoPago === metodo ? '#0b1220' : '#212529',
+                    fontWeight: metodoPago === metodo ? 'bold' : 'normal',
+                    cursor: 'pointer',
+                    textTransform: 'capitalize',
+                    outline: metodoPago === metodo ? '2px solid rgba(59,130,246,0.12)' : 'none'
+                  }}
                 >
                   {metodo}
                 </button>
               ))}
             </div>
             <div style={{ display: 'flex', gap: '10px' }}>
-              <button onClick={() => setMostrarModalPago(false)} style={{ flex: 1, padding: '12px', backgroundColor: '#f8f9fa', border: '1px solid #dee2e6', borderRadius: '6px', cursor: 'pointer' }}>Cancelar</button>
+              <button onClick={() => setMostrarModalPago(false)} style={{ flex: 1, padding: '12px', backgroundColor: '#f8f9fa', color: '#212529', border: '1px solid #dee2e6', borderRadius: '6px', cursor: 'pointer' }}>Cancelar</button>
               <button onClick={procesarVenta} disabled={!metodoPago} style={{ flex: 1, padding: '12px', backgroundColor: '#10b981', color: 'white', border: 'none', borderRadius: '6px', cursor: !metodoPago ? 'not-allowed' : 'pointer', fontWeight: 'bold' }}>Confirmar</button>
             </div>
           </div>

@@ -39,7 +39,7 @@ export default function App() {
             } />
 
             {/* Exclusivo del Admin (Lo demás queda oculto) */}
-            <Route path="/inventario" element={rol === 'admin' ? <InventarioView /> : <Navigate to="/" replace />} />
+            <Route path="/inventario" element={rol === 'admin' ? <InventarioView sesionUsuario={sesionUsuario} /> : <Navigate to="/" replace />} />
             <Route path="/reportes" element={rol === 'admin' ? <ReportesView /> : <Navigate to="/" replace />} />
             <Route path="/proveedores" element={rol === 'admin' ? <ProveedoresView /> : <Navigate to="/" replace />} />
             <Route path="/empleados" element={rol === 'admin' ? <EmpleadosView /> : <Navigate to="/" replace />} />

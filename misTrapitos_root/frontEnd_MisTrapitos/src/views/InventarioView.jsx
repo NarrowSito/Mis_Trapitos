@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-export default function InventarioView() {
+export default function InventarioView({ sesionUsuario = { id: 1 } }) {
   const [productos, setProductos] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [errorApi, setErrorApi] = useState('');
@@ -40,7 +40,8 @@ export default function InventarioView() {
     try {
       const payload = {
         id: parseInt(stockForm.id, 10),
-        stock: parseInt(stockForm.stock, 10)
+        stock: parseInt(stockForm.stock, 10),
+        usuarioId: sesionUsuario ? sesionUsuario.id : null
       };
 
       const response = await fetch('http://localhost:8080/productos/', {
